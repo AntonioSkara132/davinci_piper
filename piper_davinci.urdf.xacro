@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+  AgileX Piper with a da Vinci Si instrument adaptor on its flange, carrying an 8 mm da Vinci Si
+  instrument. The adaptor and instrument are in davinci_adapter.urdf.xacro.
+
+  Load it with:
+    ros2 launch /root/davinci_piper/davinci_piper.launch.py
+
+  Joints: joint1 ... joint6 of the Piper, then the adaptor's instrument_roll, instrument_pitch,
+  instrument_jaw_1 and instrument_jaw_2.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="piper_davinci">
+  <xacro:include filename="$(find agx_arm_description)/agx_arm_urdf/piper/urdf/piper_description.urdf"/>
+  <xacro:include filename="davinci_adapter.urdf.xacro"/>
+
+  <link name="flange_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://agx_arm_description/agx_arm_urdf/piper/meshes/dae/flange.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="flange_joint" type="fixed">
+    <parent link="link6"/>
+    <child link="flange_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- flange top face above link6 (flange.stl is 10.5 mm tall) -->
+  <xacro:davinci_adapter parent="flange_link" z="0.0105"/>
+</robot>
